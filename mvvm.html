@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>MVVM</title>
 	<style type="text/css">
+		.ex1
+		{
+			font:italic bold 12px/30px arial,sans-serif;color:#00FF00;
+		}
 		.ex2
 		{
 			font:italic bold 12px/30px arial,sans-serif;color:#FF0000;
@@ -41,7 +45,7 @@
         },
 
         computed: {
-            getHelloWord: function() {
+            getHelloWord: function() {				
                 return this.someStr + this.child.someStr;
             }
         },
@@ -49,7 +53,17 @@
         methods: {
             clickBtn: function(e) {
                 var randomStrArr = ['childOne', 'childTwo', 'childThree'];
+				
                 this.child.someStr = randomStrArr[parseInt(Math.random() * 3)];
+
+				if(this.className=='ex2')
+				{
+					this.className='ex1'
+				}
+				else
+				{
+					this.className='ex2'
+				}
             }
         }
     });

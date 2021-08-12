@@ -12,7 +12,7 @@ function MVVM(options) {
     this._initComputed(); //将computed中的方法通过this代理访问
 
 	console.log("???data:",data);
-    observe(data, this);
+    observe(data, this);  // 劫持data数据中每个子节点的setter,与getter,在里面做文章
 
     this.$compile = new Compile(options.el || document.body, this) //重新解释执行v-的标签属性,或者文本{{var}}
 }
