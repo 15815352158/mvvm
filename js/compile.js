@@ -133,7 +133,7 @@ var compileUtil = {
         });
     },
 
-    class: function(node, vm, exp) {
+    class: function(node, vm, exp) {    		
         this.bind(node, vm, exp, 'class');
     },
 
@@ -205,13 +205,8 @@ var updater = {
         node.innerHTML = typeof value == 'undefined' ? '' : value;
     },
 
-    classUpdater: function(node, value, oldValue) {
-        var className = node.className;
-        className = className.replace(oldValue, '').replace(/\s$/, '');
-
-        var space = className && String(value) ? ' ' : '';
-
-        node.className = className + space + value;
+    classUpdater: function(node, value, oldValue) {      	
+        node.className =  typeof value == 'undefined' ? '' : value;		
     },
 
     modelUpdater: function(node, value, oldValue) {

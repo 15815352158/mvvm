@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>MVVM</title>
+	<style type="text/css">
+		.ex2
+		{
+			font:italic bold 12px/30px arial,sans-serif;color:#FF0000;
+		}
+	</style>
 </head>
 <body>
-
 <div id="mvvm-app">
     <input type="text" v-model="someStr">
     <input type="text" v-model="child.someStr">
-    <!-- <p v-class="className" class="abc">
+    <p v-class="className">
         {{someStr}}
         <span v-text="child.someStr"></span>
-    </p> -->
+    </p>
     <p>{{getHelloWord}}</p>
     <p v-html="htmlStr"></p>
     <button v-on:click="clickBtn">change model</button>
@@ -28,7 +33,7 @@
         el: '#mvvm-app',
         data: {
             someStr: 'hello ',
-            className: 'btn',
+            className: 'ex2',
             htmlStr: '<span style="color: #f00;">red</span>',
             child: {
                 someStr: 'World !'
