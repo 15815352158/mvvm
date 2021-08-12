@@ -4,18 +4,23 @@ function Watcher(vm, expOrFn, cb) {
     this.expOrFn = expOrFn;
     this.depIds = {};
 
+	console.log("expOrFn:",expOrFn," watcher type:",typeof expOrFn );
     if (typeof expOrFn === 'function') {
+		console.log("------>>>function:",expOrFn);
         this.getter = expOrFn;
     } else {
         this.getter = this.parseGetter(expOrFn.trim());
     }
 
-    this.value = this.get();
+	console.log("=======!!!1====Dep.target=====",Dep.target);
+    this.value = this.get(); //调用一次get函数,get函数中会调用上面的 this.getter函数
+    console.log("=======!!!2====Dep.target=====",Dep.target);
 }
 
 Watcher.prototype = {
     constructor: Watcher,
     update: function() {
+    	console.log("-----update----");
         this.run();
     },
     run: function() {
@@ -23,10 +28,12 @@ Watcher.prototype = {
         var oldVal = this.value;
         if (value !== oldVal) {
             this.value = value;
-            this.cb.call(this.vm, value, oldVal);
+            this.cb.call(this.vm, value, oldVal);  // call是预定义函数, 这个是修改this.cb函数体类的this指针变为this.vm
+            //这个函数会更新UI中对应元素的值
         }
     },
     addDep: function(dep) {
+    	
         // 1. 每次调用run()的时候会触发相应属性的getter
         // getter里面会触发dep.depend()，继而触发这里的addDep
         // 2. 假如相应属性的dep.id已经在当前watcher的depIds里，说明不是一个新的属性，仅仅是改变了其值而已
@@ -42,14 +49,18 @@ Watcher.prototype = {
         // 触发了addDep(), 在整个forEach过程，当前wacher都会加入到每个父级过程属性的dep
         // 例如：当前watcher的是'child.child.name', 那么child, child.child, child.child.name这三个属性的dep都会加入当前watcher
         if (!this.depIds.hasOwnProperty(dep.id)) {
-            dep.addSub(this);
+
+			console.log("addDep:",dep);
+            dep.addSub(this);//添加本观察者为订阅者
             this.depIds[dep.id] = dep;
         }
     },
     get: function() {
-        Dep.target = this;
+    
+        Dep.target = this;   //这里赋值之后,才会添加订阅者, 暂时把观察者存起来.在订阅者对象中才可以访问
         var value = this.getter.call(this.vm, this.vm);
-        Dep.target = null;
+        Dep.target = null;  //添加完成之后,重新赋值null,保证只添加一次订阅者,避免对data中的某个属性重复添加相同的订阅者;
+		
         return value;
     },
 
@@ -58,10 +69,13 @@ Watcher.prototype = {
 
         var exps = exp.split('.');
 
-        return function(obj) {
+		console.log("-----------parseGetter-------------");
+
+        return function(obj) {  //这里返回一个函数
+        	console.log("666 exps:",exps," obj:",obj);
             for (var i = 0, len = exps.length; i < len; i++) {
                 if (!obj) return;
-                obj = obj[exps[i]];
+                obj = obj[exps[i]]; //这里其实会触发MVVM中对应代理data中的属性的get函数,get函数有添加订阅者
             }
             return obj;
         }

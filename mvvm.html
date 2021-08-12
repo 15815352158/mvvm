@@ -13,7 +13,7 @@
         {{someStr}}
         <span v-text="child.someStr"></span>
     </p> -->
-    <p>{{ getHelloWord }}</p>
+    <p>{{getHelloWord}}</p>
     <p v-html="htmlStr"></p>
     <button v-on:click="clickBtn">change model</button>
 </div>
@@ -49,9 +49,16 @@
         }
     });
 
+	console.log("=====================================");
+/*
+
     vm.$watch('child.someStr', function() {
-        console.log(arguments);
+        console.log("###################$watch child.someStr");
     });
+*/
+
+
+	console.log("OBJ----------------------------:",document.getElementById("mvvm-app"));
 </script>
 
 </body>
